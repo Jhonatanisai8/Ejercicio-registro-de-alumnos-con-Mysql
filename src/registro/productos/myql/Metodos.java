@@ -37,20 +37,35 @@ public class Metodos {
             consultaPreparada.setDouble(7, alumno.getNota2());
             consultaPreparada.setDouble(8, alumno.getNota3());
             consultaPreparada.setString(9, alumno.aprovadoDesaprobado());
+            consultaPreparada.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error al insertar: " + e.toString());
         }
 
     }
 
-    public void listarTabla(DefaultTableModel modelo, JTable tblDatos) {
-        String sql = "SELECT alumnos.id, alumnos.nombres, alumnos.appellidos, alumnos.dni, seccion.nombre, alumnos.nota01, alumnos.nota02, alumnos.nota03, alumnos.nivel_academico FROM alumnos INNER JOIN seccion ON seccion.id = alumnos.idseccion";
+    public void listarTabla(DefaultTableModel modelo, JTable tblDatos, int opcion) {
+        for (int i = 0; i < tblDatos.getRowCount(); i++) {
+            modelo.removeRow(i);
+            i = i - 1;
+        }
+        String sqlA = "SELECT alumnos.id, alumnos.nombres, alumnos.appellidos, alumnos.dni, seccion.nombre, alumnos.nota01, alumnos.nota02, alumnos.nota03, alumnos.nivel_academico FROM alumnos INNER JOIN seccion ON seccion.id = alumnos.idseccion WHERE seccion.nombre like \"A\"";
+        String sqlB = "SELECT alumnos.id, alumnos.nombres, alumnos.appellidos, alumnos.dni, seccion.nombre, alumnos.nota01, alumnos.nota02, alumnos.nota03, alumnos.nivel_academico FROM alumnos INNER JOIN seccion ON seccion.id = alumnos.idseccion WHERE seccion.nombre like \"B\"";
+        //     tblDatos.setModel(modelo);
+        PreparedStatement consultaPreparada = null;
         try {
             Connection conectar = Conexion.conectarBD();
-            PreparedStatement consultaPreparada = conectar.prepareStatement(sql);
+            switch (opcion) {
+                case 1:
+                    consultaPreparada = conectar.prepareStatement(sqlA);
+                    break;
+                case 2:
+                    consultaPreparada = conectar.prepareStatement(sqlB);
+                    break;
+            }
 
             ResultSet resultado = consultaPreparada.executeQuery();
-            
+
             //obtenemos los datos de la tabla en la base de datos
             ResultSetMetaData datos = resultado.getMetaData();
             int cantColumnas = datos.getColumnCount();
@@ -63,8 +78,8 @@ public class Metodos {
                 }
                 modelo.addRow(arreglo);
             }
-            
             tblDatos.setModel(modelo);
+            conectar.close();
         } catch (SQLException e) {
             System.out.println("Error al listar en tabla: " + e.toString());
         }
