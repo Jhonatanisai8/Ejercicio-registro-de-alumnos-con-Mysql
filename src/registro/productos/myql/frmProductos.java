@@ -6,7 +6,6 @@ package registro.productos.myql;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import registro.productos.myql.Conex.Conexion;
 
 /**
  *
@@ -17,16 +16,21 @@ public class frmProductos extends javax.swing.JFrame {
     /**
      * Creates new form frmProductos
      */
-    Conexion conexion = new Conexion();
-    
     Metodos metodos = new Metodos();
-    
-    String cabezar[] = {"ID", "NOMBRES,", "APELLIDOS", "DNI", "AULA", "NOTA 01", "NOTA 02", "NOTA 03", "CONDICIÓN"};
-    
-    DefaultTableModel modelo = new DefaultTableModel(cabezar, 0);
+
+    String cabezarA[] = {"ID", "NOMBRES,", "APELLIDOS", "DNI", "AULA", "NOTA 01", "NOTA 02", "NOTA 03", "CONDICIÓN"};
+
+    DefaultTableModel modeloA = new DefaultTableModel(cabezarA, 0);
+
+    String cabezarB[] = {"ID", "NOMBRES,", "APELLIDOS", "DNI", "AULA", "NOTA 01", "NOTA 02", "NOTA 03", "CONDICIÓN"};
+
+    DefaultTableModel modeloB = new DefaultTableModel(cabezarA, 0);
 
     public frmProductos() {
         initComponents();
+        metodos.listarTabla(modeloA, tblDatosA, 1);
+        metodos.listarTabla(modeloB, tblDatosB, 2);
+
     }
 
     /**
@@ -73,21 +77,21 @@ public class frmProductos extends javax.swing.JFrame {
 
         jLabel5.setText("SECION:");
 
-        txtNota1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "NOTA 01:", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 15), new java.awt.Color(0, 0, 204))); // NOI18N
+        txtNota1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(41, 43, 45)), "NOTA 01:", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 12), new java.awt.Color(0, 0, 204))); // NOI18N
         txtNota1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtNota1ActionPerformed(evt);
             }
         });
 
-        txtNota2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "NOTA 02:", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 15), new java.awt.Color(0, 0, 204))); // NOI18N
+        txtNota2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(41, 43, 45)), "NOTA 02:", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 12), new java.awt.Color(0, 0, 204))); // NOI18N
         txtNota2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtNota2ActionPerformed(evt);
             }
         });
 
-        txtNota3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "NOTA 03:", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 15), new java.awt.Color(0, 0, 204))); // NOI18N
+        txtNota3.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(41, 43, 45)), "NOTA 03:", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 12), new java.awt.Color(0, 0, 204))); // NOI18N
         txtNota3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtNota3ActionPerformed(evt);
@@ -236,7 +240,7 @@ public class frmProductos extends javax.swing.JFrame {
         double nota1;
         double nota2;
         double nota3;
-        
+
         nombres = txtNombres.getText();
         apellidos = txtApellidos.getText();
         dni = Integer.parseInt(txtDNI.getText());
@@ -244,12 +248,13 @@ public class frmProductos extends javax.swing.JFrame {
         nota1 = Double.parseDouble(txtNota1.getText());
         nota2 = Double.parseDouble(txtNota2.getText());
         nota3 = Double.parseDouble(txtNota3.getText());
-        
+
         Alumno alumno = new Alumno(nombres, apellidos, dni, seccion, nota1, nota2, nota3);
         Metodos.insertarAlumnio(alumno);
         JOptionPane.showMessageDialog(rootPane, "Alumno insertado");
-        
-        metodos.listarTabla(modelo, tblDatosA);
+
+        metodos.listarTabla(modeloA, tblDatosA, 1);
+        metodos.listarTabla(modeloB, tblDatosB, 2);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
