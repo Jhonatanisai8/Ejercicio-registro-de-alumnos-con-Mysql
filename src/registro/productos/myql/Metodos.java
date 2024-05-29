@@ -3,6 +3,7 @@ package registro.productos.myql;
 import registro.productos.myql.Conex.Conexion;
 import java.sql.*;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -84,4 +85,31 @@ public class Metodos {
             System.out.println("Error al listar en tabla: " + e.toString());
         }
     }
+
+    public static void alumnosAprovados(JTextField txtContadorB) {
+        try {
+            Connection conectar = Conexion.conectarBD();
+            String sql = "SELECT COUNT(alumnos.nivel_academico) FROM alumnos INNER JOIN seccion ON seccion.id = alumnos.idseccion WHERE alumnos.nivel_academico like \"Aprovado\" AND alumnos.idseccion = 2";
+
+            PreparedStatement consultaPreparada = conectar.prepareStatement(sql);
+            ResultSet resultado = consultaPreparada.executeQuery();
+
+            //obtenemos los datos de la tabla en la base de datos
+            ResultSetMetaData datos = resultado.getMetaData();
+            int cantColumnas = datos.getColumnCount();
+
+            //cargamos los datos 
+            while (resultado.next()) {
+                Object arreglo[] = new Object[cantColumnas];
+                for (int i = 0; i < cantColumnas; i++) {
+                    arreglo[i] = resultado.getObject(i + 1);
+                    txtContadorB.setText(arreglo[i].toString());
+                }
+            }
+            consultaPreparada.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error al insertar: " + e.toString());
+        }
+    }
+
 }
